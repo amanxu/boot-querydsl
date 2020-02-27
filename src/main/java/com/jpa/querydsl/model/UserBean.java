@@ -16,6 +16,7 @@ import java.io.Serializable;
 @Table(name = "t_user")
 public class UserBean implements Serializable {
 
+    private static final long serialVersionUID = 5782070798947701326L;
     @Id
     @Column(name = "t_id")
     @GeneratedValue

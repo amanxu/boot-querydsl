@@ -24,6 +24,7 @@ import java.util.List;
 @RestController
 @RequestMapping(value = "/user")
 public class UserController {
+
     @Autowired
     private UserJPA usrJPA;
 
@@ -39,7 +40,7 @@ public class UserController {
     @PostConstruct
     public void initFactory() {
         queryFactory = new JPAQueryFactory(entityManager);
-
+        log.debug("queryFactory init success");
     }
 
 
