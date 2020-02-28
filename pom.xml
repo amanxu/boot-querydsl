@@ -17,6 +17,7 @@
     <properties>
         <java.version>1.8</java.version>
         <querydsl.version>4.2.2</querydsl.version>
+        <maven.archetype.version>3.0.1</maven.archetype.version>
     </properties>
 
     <dependencies>
@@ -94,6 +95,12 @@
             </exclusions>
         </dependency>
 
+            <dependency>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-archetype-plugin</artifactId>
+                <version>${maven.archetype.version}</version>
+            </dependency>
+
     </dependencies>
 
     <build>
@@ -101,6 +108,14 @@
             <plugin>
                 <groupId>org.springframework.boot</groupId>
                 <artifactId>spring-boot-maven-plugin</artifactId>
+            </plugin>
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-compiler-plugin</artifactId>
+                <configuration>
+                    <source>${java.version}</source>
+                    <target>${java.version}</target>
+                </configuration>
             </plugin>
             <!--添加QueryDSL插件支持-->
             <plugin>

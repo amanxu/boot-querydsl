@@ -1,15 +1,8 @@
 package com.jpa.querydsl.service;
 
-import com.jpa.querydsl.model.QUserBean;
 import com.jpa.querydsl.model.UserBean;
 import com.jpa.querydsl.model.dto.UserCreateDTO;
-import com.querydsl.jpa.impl.JPAQueryFactory;
-import org.springframework.beans.BeanUtils;
-import org.springframework.data.domain.Sort;
-import org.springframework.util.Assert;
 
-import javax.annotation.Resource;
-import javax.transaction.Transactional;
 import java.util.List;
 
 /**
@@ -26,7 +19,7 @@ public interface IUserService {
      * @param userCreateDTO
      * @return
      */
-     UserBean createUser(UserCreateDTO userCreateDTO) ;
+    UserBean createUser(UserCreateDTO userCreateDTO);
 
     /**
      * 新增用户
@@ -34,7 +27,7 @@ public interface IUserService {
      * @param userCreateDTO
      * @return
      */
-     Long updateUser(UserCreateDTO userCreateDTO);
+    Long updateUser(UserCreateDTO userCreateDTO);
 
 
     /**
@@ -42,7 +35,7 @@ public interface IUserService {
      *
      * @return
      */
-     List<UserBean> queryAllByDsl() ;
+    List<UserBean> queryAllByDsl();
 
 
     /**
@@ -50,7 +43,7 @@ public interface IUserService {
      *
      * @return
      */
-     List<UserBean> queryAllByJpa() ;
+    List<UserBean> queryAllByJpa();
 
 
     /**
@@ -59,7 +52,7 @@ public interface IUserService {
      * @param id
      * @return
      */
-     UserBean queryById(Long id) ;
+    UserBean queryById(Long id);
 
     /**
      * 根据名称模糊查询
@@ -67,5 +60,5 @@ public interface IUserService {
      * @param userName
      * @return
      */
-     List<UserBean> queryListByName(String userName) ;
+    List<UserBean> queryListByName(String userName);
 }
