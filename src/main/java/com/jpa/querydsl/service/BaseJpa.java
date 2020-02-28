@@ -11,5 +11,5 @@ import org.springframework.data.repository.NoRepositoryBean;
  * @date: 2020/2/27 3:31 PM
  */
 @NoRepositoryBean
-public interface BaseJPA<T> extends JpaRepository<T, Long>, JpaSpecificationExecutor<T>, QueryDslPredicateExecutor<T> {
+public interface BaseJpa<T> extends JpaRepository<T, Long>, JpaSpecificationExecutor<T>, QueryDslPredicateExecutor<T> {
 }
