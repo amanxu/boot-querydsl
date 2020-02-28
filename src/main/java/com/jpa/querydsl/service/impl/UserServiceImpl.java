@@ -1,74 +1,58 @@
-package com.jpa.querydsl.respository;
+package com.jpa.querydsl.service.impl;
 
 import com.jpa.querydsl.model.QUserBean;
 import com.jpa.querydsl.model.UserBean;
 import com.jpa.querydsl.model.dto.UserCreateDTO;
+import com.jpa.querydsl.service.IUserService;
 import com.jpa.querydsl.service.UserJpa;
 import com.querydsl.jpa.impl.JPAQueryFactory;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.BeanUtils;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Repository;
+import org.springframework.data.domain.Sort;
+import org.springframework.stereotype.Service;
 import org.springframework.util.Assert;
 
-import javax.annotation.PostConstruct;
-import javax.persistence.EntityManager;
+import javax.annotation.Resource;
 import javax.transaction.Transactional;
 import java.util.List;
 
 /**
  * @description:
  * @author: niexiaoxu
- * @date: 2020/2/27 5:57 PM
+ * @date: 2020/2/28 10:38 AM
  */
 @Slf4j
-@Repository
-public class UserJpaRepository {
+@Service
+public class UserServiceImpl implements IUserService {
 
-    @Autowired
-    private UserJpa userJPA;
+    @Resource
+    private UserJpa userJpa;
 
-    @Autowired
-    private EntityManager entityManager;
+    @Resource
+    private JPAQueryFactory jpaQueryFactory;
 
-    private JPAQueryFactory queryFactory;
 
-    @PostConstruct
-    public void initFactory() {
-        queryFactory = new JPAQueryFactory(entityManager);
-        log.debug("queryFactory init success");
-    }
-
-    /**
-     * 新增用户
-     *
-     * @param userCreateDTO
-     * @return
-     */
+    @Override
     public UserBean createUser(UserCreateDTO userCreateDTO) {
         UserBean userBean = new UserBean();
         // 模拟对象转换
         BeanUtils.copyProperties(userCreateDTO, userBean);
 
         // 持久化用户数据
-        UserBean saveResult = userJPA.save(userBean);
+        UserBean saveResult = userJpa.save(userBean);
         return saveResult;
     }
 
-    /**
-     * 新增用户
-     *
-     * @param userCreateDTO
-     * @return
-     */
-    @Transactional
+
+    @Override
+    @Transactional(rollbackOn = Exception.class)
     public Long updateUser(UserCreateDTO userCreateDTO) {
 
         Assert.notNull(userCreateDTO.getId(), "update id is null");
         QUserBean qUserBean = QUserBean.userBean;
 
         // 持久化用户数据
-        long updateResult = queryFactory.update(qUserBean)
+        long updateResult = jpaQueryFactory.update(qUserBean)
                 .where(qUserBean.id.eq(userCreateDTO.getId()))
                 .set(qUserBean.name, userCreateDTO.getName())
                 .set(qUserBean.age, userCreateDTO.getAge())
@@ -79,16 +63,12 @@ public class UserJpaRepository {
     }
 
 
-    /**
-     * 查询全部数据并根据id倒序
-     *
-     * @return
-     */
-    public List<UserBean> queryAll() {
+    @Override
+    public List<UserBean> queryAllByDsl() {
         //使用queryDsl查询
         QUserBean qUserBean = QUserBean.userBean;
         //查询并返回结果集
-        List<UserBean> userBeanList = queryFactory
+        List<UserBean> userBeanList = jpaQueryFactory
                 //查询源
                 .selectFrom(qUserBean)
                 //根据id倒序
@@ -98,31 +78,29 @@ public class UserJpaRepository {
         return userBeanList;
     }
 
-    /**
-     * 根据ID查询详情
-     *
-     * @param id
-     * @return
-     */
+
+    @Override
+    public List<UserBean> queryAllByJpa() {
+        Sort sort = new Sort(Sort.Direction.DESC, "id");
+        return userJpa.findAll(sort);
+    }
+
+
+    @Override
     public UserBean queryById(Long id) {
         QUserBean qUserBean = QUserBean.userBean;
-        UserBean userBean = queryFactory.selectFrom(qUserBean)
+        UserBean userBean = jpaQueryFactory.selectFrom(qUserBean)
                 .where(qUserBean.id.eq(id))
                 .fetchOne();
         return userBean;
     }
 
-    /**
-     * 根据名称模糊查询
-     *
-     * @param userName
-     * @return
-     */
+
+    @Override
     public List<UserBean> queryListByName(String userName) {
         QUserBean qUserBean = QUserBean.userBean;
-        return queryFactory.selectFrom(qUserBean)
+        return jpaQueryFactory.selectFrom(qUserBean)
                 .where(qUserBean.name.like(userName))
                 .fetch();
     }
-
 }

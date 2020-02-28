@@ -1,49 +1,33 @@
-package com.jpa.querydsl.respository;
+package com.jpa.querydsl.service.impl;
 
 import com.jpa.querydsl.model.QUserBean;
 import com.jpa.querydsl.model.QUserOrderBean;
 import com.jpa.querydsl.model.dto.UserOrderDTO;
+import com.jpa.querydsl.service.IOrderService;
 import com.querydsl.core.types.Projections;
 import com.querydsl.jpa.impl.JPAQueryFactory;
-import lombok.extern.slf4j.Slf4j;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Repository;
+import org.springframework.stereotype.Service;
 
-import javax.annotation.PostConstruct;
-import javax.persistence.EntityManager;
+import javax.annotation.Resource;
 
 /**
  * @description:
  * @author: niexiaoxu
- * @date: 2020/2/28 9:49 AM
+ * @date: 2020/2/28 10:41 AM
  */
-@Slf4j
-@Repository
-public class OrderJpaRepository {
+@Service
+public class OrderServiceImpl implements IOrderService {
 
-    @Autowired
-    private EntityManager entityManager;
+    @Resource
+    private JPAQueryFactory jpaQueryFactory;
 
-    private JPAQueryFactory queryFactory;
-
-    @PostConstruct
-    public void initFactory() {
-        queryFactory = new JPAQueryFactory(entityManager);
-        log.debug("queryFactory init success");
-    }
-
-    /**
-     * 查询订单信息，关联查询用户信息,并通过自定义字段接收
-     *
-     * @param id
-     * @return
-     */
+    @Override
     public UserOrderDTO queryOrderDetail(Long id) {
 
         QUserOrderBean qUserOrderBean = QUserOrderBean.userOrderBean;
         QUserBean qUserBean = QUserBean.userBean;
 
-        UserOrderDTO userOrderDTO = queryFactory
+        UserOrderDTO userOrderDTO = jpaQueryFactory
                 // 用户自定义BEAN接收查询结果
                 .select(Projections.bean(UserOrderDTO.class,
                         qUserOrderBean.id,
