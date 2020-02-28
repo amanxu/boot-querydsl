@@ -43,11 +43,26 @@
 ```
 * QueryDSL的插件会自动扫描项目内配置了@Entity的实体类，并根据实体的内定义的字段以及关联类通过JPAAnnotationProcessor自动创建Q[实体类名称]的查询实体，
 创建完成后会将实体存放到我们配置outputDirectory属性目录下。
+* 自定义JpaQueryFactoryConfig配置类项目启动是生成全局JPAQueryFactory工厂类，JPAQueryFactory类可以使用原生QueryDsl做复杂查询
+```java
+@Slf4j
+@Component
+@Configuration
+public class JpaQueryFactoryConfig {
+
+    @Autowired
+    private EntityManager entityManager;
+
+    @Bean(name = "jpaQueryFactory")
+    public JPAQueryFactory initFactory() {
+        log.debug("queryFactory init success");
+        return new JPAQueryFactory(entityManager);
+    }
+}
+```
 
 1. 单表查询具体实现如下(请参考UserController)：
 ```java
-@ApiOperation(value = "查询全部数据并根据id倒序")
-@PostMapping(value = "/queryAll")
 public List<UserBean> queryAll() {
     //使用queryDsl查询
     QUserBean qUserBean = QUserBean.userBean;
@@ -64,8 +79,6 @@ public List<UserBean> queryAll() {
 ```
 2 . 多表关联查询，并通过自定义实体类接收查询结果实现如下(请参考OrderController)：
 ```java
-@ApiOperation(value = "查询订单信息，关联查询用户信息,并通过自定义字段接收")
-@GetMapping(value = "findOrderInfo")
 public UserOrderDTO queryOrderDetail(@RequestParam("id") Long id) {
 
     QUserOrderBean qUserOrderBean = QUserOrderBean.userOrderBean;
