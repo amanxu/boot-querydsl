@@ -1,4 +1,4 @@
-package com.jpa.querydsl.service;
+package com.jpa.querydsl.repository;
 
 import com.jpa.querydsl.model.UserBean;
 
@@ -7,6 +7,6 @@ import com.jpa.querydsl.model.UserBean;
  * @author: niexiaoxu
  * @date: 2020/2/27 3:34 PM
  */
-public interface UserJpa extends BaseJpa<UserBean> {
+public interface UserJpaRepository extends BaseJpaRepository<UserBean> {
 
 }

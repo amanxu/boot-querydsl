@@ -4,7 +4,7 @@ import com.jpa.querydsl.model.QUserBean;
 import com.jpa.querydsl.model.UserBean;
 import com.jpa.querydsl.model.dto.UserCreateDTO;
 import com.jpa.querydsl.service.IUserService;
-import com.jpa.querydsl.service.UserJpa;
+import com.jpa.querydsl.repository.UserJpaRepository;
 import com.querydsl.jpa.impl.JPAQueryFactory;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.BeanUtils;
@@ -26,7 +26,7 @@ import java.util.List;
 public class UserServiceImpl implements IUserService {
 
     @Resource
-    private UserJpa userJpa;
+    private UserJpaRepository userJpa;
 
     @Resource
     private JPAQueryFactory jpaQueryFactory;
