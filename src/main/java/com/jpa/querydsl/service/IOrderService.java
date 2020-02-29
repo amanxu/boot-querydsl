@@ -1,6 +1,9 @@
 package com.jpa.querydsl.service;
 
+import com.jpa.querydsl.model.UserOrderBean;
 import com.jpa.querydsl.model.dto.UserOrderDTO;
+import com.querydsl.core.QueryResults;
+import org.springframework.data.domain.Page;
 
 /**
  * @description:
@@ -16,4 +19,23 @@ public interface IOrderService {
      * @return
      */
     UserOrderDTO queryOrderDetail(Long id);
+
+    /**
+     * 根据用户ID分页查询用户
+     *
+     * @param userId
+     * @param offset
+     * @param pageSize
+     * @return
+     */
+    Page<UserOrderBean> queryPageOrderByUserId(Long userId, Integer offset, Integer pageSize);
+
+    /**
+     * 使用原生Query DSL分页查询
+     * @param userId
+     * @param offset
+     * @param pageSize
+     * @return
+     */
+    QueryResults<UserOrderBean> queryPageOrderByUserIdDsl(Long userId, Integer offset, Integer pageSize);
 }
