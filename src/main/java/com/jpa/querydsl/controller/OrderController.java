@@ -2,6 +2,7 @@ package com.jpa.querydsl.controller;
 
 import com.jpa.querydsl.model.UserOrderBean;
 import com.jpa.querydsl.model.dto.UserOrderDTO;
+import com.jpa.querydsl.repository.OrderJpaRepository;
 import com.jpa.querydsl.service.IOrderService;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
@@ -13,6 +14,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import javax.annotation.Resource;
+import java.util.List;
 
 /**
  * @description:
@@ -27,6 +29,9 @@ public class OrderController {
 
     @Resource
     private IOrderService orderService;
+
+    @Resource
+    private OrderJpaRepository orderJpaRepository;
 
     @ApiOperation(value = "查询订单信息，关联查询用户信息,并通过自定义字段接收")
     @GetMapping(value = "/findOrderInfo")
@@ -47,5 +52,12 @@ public class OrderController {
     public Page<UserOrderBean> queryPageOrderByUserIdDsl(@RequestParam("userId") Long userId,
                                                          @RequestParam("offset") Integer offset, @RequestParam("pageSize") Integer pageSize) {
         return orderService.queryPageOrderByUserId(userId, offset, pageSize);
+    }
+
+    @ApiOperation(value = "根据用户ID和商品ID查询")
+    @GetMapping(value = "/findByUserIdAndProductId")
+    public List<UserOrderBean> queryPageOrderByUserIdDsl(@RequestParam("userId") Long userId,
+                                                         @RequestParam("productId") Long productId) {
+        return orderJpaRepository.findByUserIdAndProductId(userId,productId);
     }
 }
